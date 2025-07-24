@@ -9,7 +9,6 @@ import { getVideo, updateVideo } from "../db/videos";
 import { getAssetDiskPath, mediaTypeToExt } from "./assets";
 import { s3, S3Client } from "bun";
 import { randomBytes } from "crypto";
-import { type Video } from "../db/videos";
 
 export async function handlerUploadVideo(cfg: ApiConfig, req: BunRequest) {
 
@@ -72,40 +71,17 @@ export async function handlerUploadVideo(cfg: ApiConfig, req: BunRequest) {
 
   const aspectSize = await getVideoAspectRatio(assetDiskPathProcessed);
 
-  const s3Key = `${aspectSize}/${fileName}`;
-  const s3File = cfg.s3Client.file(s3Key, { type: mediaType });
-
+  const s3File = cfg.s3Client.file(`${aspectSize}/${fileName}`, { type: mediaType });
   await s3File.write(Bun.file(assetDiskPathProcessed));
 
   await Bun.file(assetDiskPathProcessed).delete();
 
-  video.videoURL = s3Key;
-  const signedURL = dbVideoToSignedVideo(cfg, video);
-
+  video.videoURL = `https://${cfg.s3Bucket}.s3.${cfg.s3Region}.amazonaws.com/${aspectSize}/${fileName}`;
   updateVideo(cfg.db, video);
+  
 
-  return respondWithJSON(200, signedURL);
-}
 
-export function dbVideoToSignedVideo(cfg: ApiConfig, video: Video){
-  const newVideo: Video = { ...video }; 
-
-  if (video.videoURL) {
-    newVideo.videoURL = generatePresignedURL(cfg, video.videoURL, 1200);
-  } 
-  else {
-    newVideo.videoURL = "";
-  }
-
-  return newVideo;
-}
-
- function generatePresignedURL(cfg: ApiConfig, key: string, expireTime: number) {
-  const presignURL =  S3Client.presign(key, {
-    expiresIn: expireTime
-  });
-
-  return presignURL;
+  return respondWithJSON(200, null);
 }
 
 
