@@ -76,7 +76,7 @@ export async function handlerUploadVideo(cfg: ApiConfig, req: BunRequest) {
 
   await Bun.file(assetDiskPathProcessed).delete();
 
-  video.videoURL = `https://${cfg.s3Bucket}.s3.${cfg.s3Region}.amazonaws.com/${aspectSize}/${fileName}`;
+  video.videoURL = `https://${cfg.s3CfDistribution}/${aspectSize}/${fileName}`;
   updateVideo(cfg.db, video);
   
 
