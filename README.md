@@ -1,65 +1,67 @@
-# learn-file-storage-s3-typescript-starter (Tubely)
 
-This repo contains the starter code for the Tubely application - the #1 tool for engagement bait - for the "Learn File Servers and CDNs with S3 and CloudFront" [course](https://www.boot.dev/courses/learn-file-servers-s3-cloudfront-typescript) on [boot.dev](https://www.boot.dev)
+# Tubely: File Storage & S3 CDN Application
 
-## Quickstart
+Tubely is a fully functional web application for uploading, storing, and serving videos and images. It uses AWS S3 for video storage and AWS CloudFront CDN distribution for secure and efficient video delivery. Images are stored locally, and their file paths and metadata are managed in a SQLite database. The app demonstrates modern file server techniques, secure uploads, video processing, and CDN-based access control for media files.
 
-*This is to be used as a *reference\* in case you need it, you should follow the instructions in the course rather than trying to do everything here.
+## What does Tubely do?
 
-## 1. Install dependencies
+- Allows users to upload videos and images via a web interface
+- Processes videos for fast streaming (using ffmpeg)
+- Stores video files in AWS S3 buckets
+- Delivers videos securely and efficiently via AWS CloudFront CDN distribution
+- Stores images locally and tracks their location and metadata in SQLite
+- Handles authentication and user management
+- Provides endpoints for uploading, retrieving, and listing media
+- Uses SQLite for metadata and user data
+
+## Dependencies
+
+### Install dependencies
 
 - [Typescript](https://www.typescriptlang.org/)
 - [Bun](https://bun.sh/)
-- [FFMPEG](https://ffmpeg.org/download.html) - both `ffmpeg` and `ffprobe` are required to be in your `PATH`.
-
-```bash
-# linux
-sudo apt update
-sudo apt install ffmpeg
-
-# mac
-brew update
-brew install ffmpeg
-```
-
-- [SQLite 3](https://www.sqlite.org/download.html) only required for you to manually inspect the database.
-
-```bash
-# linux
-sudo apt update
-sudo apt install sqlite3
-
-# mac
-brew update
-brew install sqlite3
-```
-
+- [FFMPEG](https://ffmpeg.org/download.html) (`ffmpeg` and `ffprobe` required in your `PATH`)
+- [SQLite 3](https://www.sqlite.org/download.html) (for inspecting the database)
 - [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
-## 2. Download sample images and videos
-
+#### Example installation (Linux)
 ```bash
-./samplesdownload.sh
-# samples/ dir will be created
-# with sample images and videos
+sudo apt update
+sudo apt install ffmpeg sqlite3
 ```
 
-## 3. Configure environment variables
-
-Copy the `.env.example` file to `.env` and fill in the values.
-
+#### Example installation (Mac)
 ```bash
-cp .env.example .env
+brew update
+brew install ffmpeg sqlite3
 ```
 
-You'll need to update values in the `.env` file to match your configuration, but _you won't need to do anything here until the course tells you to_.
+## Usage
 
-## 3. Run the server
+1. Download sample images and videos:
+   ```bash
+   ./samplesdownload.sh
+   # samples/ dir will be created with sample images and videos
+   ```
 
-```bash
-bun run src/index.ts
-```
+2. Configure environment variables:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your AWS and app settings
+   ```
 
-- You should see a new database file `tubely.db` created in the root directory.
-- You should see a new `assets` directory created in the root directory, this is where the images will be stored.
-- You should see a link in your console to open the local web page.
+3. Run the server:
+   ```bash
+   bun run src/index.ts
+   ```
+
+   - The database file `tubely.db` will be created in the root directory.
+   - The `assets` directory will be created for local image storage.
+
+---
+
+## Credits
+
+This project was developed based on the course **Learn File Servers and CDNs with S3 and CloudFront** from **boot.dev**.
+
+  - [Course link](https://www.boot.dev/courses/learn-file-servers-s3-cloudfront-typescript) on [boot.dev](https://www.boot.dev)
